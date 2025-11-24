@@ -5,7 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "dev-secret-key-for-local"
 DEBUG = True
-ALLOWED_HOSTS = ['https://expense-tracker-web-application-l3it.onrender.com/']
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     "django.contrib.admin",

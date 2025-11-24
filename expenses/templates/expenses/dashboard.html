@@ -1,0 +1,76 @@
+{% extends "expenses/base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="row mb-4">
+  <div class="col-md-3">
+    <div class="card text-white bg-success mb-3">
+      <div class="card-body">
+        <h6 class="card-title">This Month</h6>
+        <h4>{{ summary.total_month }}</h4>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-white bg-primary mb-3">
+      <div class="card-body">
+        <h6 class="card-title">All Time Total</h6>
+        <h4>{{ summary.total_all }}</h4>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-white bg-info mb-3">
+      <div class="card-body">
+        <h6 class="card-title">Expenses Count</h6>
+        <h4>{{ summary.expense_count }}</h4>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-white bg-danger mb-3">
+      <div class="card-body">
+        <h6 class="card-title">Highest Expense</h6>
+        <h4>{{ summary.highest_amount }}</h4>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-8">
+    <h5>Recent</h5>
+    <ul class="list-group mb-4">
+      {% for e in recent %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <div class="fw-bold">{{ e.title }}</div>
+            <small class="text-muted">{{ e.date }} · {{ e.category }}</small>
+          </div>
+          <span class="badge bg-secondary rounded-pill">{{ e.amount }}</span>
+        </li>
+      {% empty %}
+        <li class="list-group-item">No recent expenses.</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card mb-3">
+      <div class="card-body">
+        <h6>Last 6 months</h6>
+        <canvas id="miniChart" height="120"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const labels = {{ summary.labels|safe }};
+  const values = {{ summary.values|safe }};
+  new Chart(document.getElementById('miniChart').getContext('2d'), {
+    type: 'line',
+    data: { labels: labels, datasets: [{ label: 'Monthly total', data: values, fill:false, tension:0.3 }] },
+    options: { responsive:true, maintainAspectRatio:false }
+  });
+</script>
+{% endblock %}
